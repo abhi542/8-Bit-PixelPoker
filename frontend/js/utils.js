@@ -46,5 +46,17 @@ const Draw = {
             this.ctx.lineWidth = 2;
             this.ctx.stroke();
         }
+    },
+
+    pixelSprite(sprite, x, y, size, color) {
+        if (!sprite) return;
+        this.ctx.fillStyle = color;
+        for (let r = 0; r < sprite.length; r++) {
+            for (let c = 0; c < sprite[r].length; c++) {
+                if (sprite[r][c] === 1) {
+                    this.ctx.fillRect(x + c * size, y + r * size, size, size);
+                }
+            }
+        }
     }
 };
