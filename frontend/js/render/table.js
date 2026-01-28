@@ -73,33 +73,79 @@ const TableRenderer = {
         }
     },
 
-    // Helper: Draw Chip Stack
+    // Helper: Draw Chip Stack (Pixel Art)
     drawChips(x, y, amount) {
         if (amount <= 0) return;
-        const stackHeight = Math.min(Math.floor(amount / 10), 5); // Visual limit
 
-        for (let i = 0; i < stackHeight + 1; i++) {
-            const dy = y - (i * 4);
-            // Main body
-            Draw.ctx.fillStyle = "#3498db";
-            Draw.ctx.beginPath();
-            Draw.ctx.ellipse(x, dy, 12, 6, 0, 0, Math.PI * 2);
-            Draw.ctx.fill();
-            Draw.ctx.strokeStyle = "#2980b9";
-            Draw.ctx.lineWidth = 1;
-            Draw.ctx.stroke();
+        // Denominations: 1000=Gold, 500=Purple, 100=Black, 25=Green, 5=Red, 1=White
+        // INLINED COLORS to avoid Config Caching issues
+        const denoms = [
+            { val: 1000, color: '#f1c40f' }, // Gold
+            { val: 500, color: '#9b59b6' }, // Purple
+            { val: 100, color: '#444444' }, // Light Black
+            { val: 25, color: '#6abe30' }, // Green
+            { val: 10, color: '#5b6ee1' }, // Blue
+            { val: 5, color: '#d95763' }, // Red
+            { val: 1, color: '#ffffff' }  // White
+        ];
 
-            // Side/Thickness
-            Draw.ctx.fillStyle = "#2980b9";
-            Draw.ctx.beginPath();
-            Draw.ctx.moveTo(x - 12, dy);
-            Draw.ctx.lineTo(x - 12, dy + 4);
-            Draw.ctx.ellipse(x, dy + 4, 12, 6, 0, 0, Math.PI);
-            Draw.ctx.lineTo(x + 12, dy);
-            Draw.ctx.fill();
+        let remaining = amount;
+        let stack = [];
+
+        // Limit total chips visually
+        const MAX_VISIBLE_CHIPS = 12;
+        let totalChips = 0;
+
+        for (let d of denoms) {
+            const count = Math.floor(remaining / d.val);
+            if (count > 0) {
+                for (let i = 0; i < count; i++) {
+                    stack.push(d.color);
+                    totalChips++;
+                    if (totalChips >= MAX_VISIBLE_CHIPS) break;
+                }
+                remaining %= d.val;
+            }
+            if (totalChips >= MAX_VISIBLE_CHIPS) break;
         }
 
-        Draw.text(`${amount}`, x, y + 20, 10, '#fff');
+        // Draw Stack (Bottom Up)
+        const cw = 14 * 1.5;
+        const ch = 4 * 1.5;
+        const step = 3 * 1.5;
+
+        let curY = y;
+        for (let color of stack) {
+            // Side (Darker)
+            const darker = this.shadeColor(color, -20);
+            Draw.ctx.fillStyle = darker;
+            Draw.ctx.fillRect(x - cw / 2, curY - ch, cw, ch);
+
+            // Top (Surface)
+            Draw.ctx.fillStyle = color;
+            Draw.ctx.fillRect(x - cw / 2, curY - ch - 2, cw, 3);
+
+            // Highlight strip on top
+            Draw.ctx.fillStyle = "rgba(255,255,255,0.3)";
+            Draw.ctx.fillRect(x - cw / 2 + 2, curY - ch - 2, cw - 4, 1);
+
+            // Side Stripes (White) - aesthetic noise
+            if (color !== CONFIG.colors.chipWhite) {
+                Draw.ctx.fillStyle = "rgba(255,255,255,0.6)";
+                Draw.ctx.fillRect(x - cw / 2 + 2, curY - 2, 2, 2);
+                Draw.ctx.fillRect(x + cw / 2 - 4, curY - 2, 2, 2);
+            }
+
+            curY -= step;
+        }
+
+        Draw.text(`${amount}`, x, y + 20, 8, '#fff');
+    },
+
+    shadeColor(color, percent) {
+        if (!color) return "#000";
+        let f = parseInt(color.slice(1), 16), t = percent < 0 ? 0 : 255, p = percent < 0 ? percent * -1 : percent, R = f >> 16, G = f >> 8 & 0x00FF, B = f & 0x0000FF;
+        return "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
     },
 
     drawSeat(idx, cx, cy, tw, th, seat) {
