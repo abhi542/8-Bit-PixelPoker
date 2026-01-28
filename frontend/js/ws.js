@@ -86,6 +86,7 @@ const WS = {
                 State.updateGame(msg.payload);
                 State.lobbyState = 'IN_GAME';
                 App.showGame();
+                if (App && App.checkWinner) App.checkWinner();
                 break; // Trigger render loop automatically via RAF
 
             case 'ERROR':

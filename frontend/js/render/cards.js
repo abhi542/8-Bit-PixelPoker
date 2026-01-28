@@ -60,7 +60,8 @@ const CardRenderer = {
         const color = colors[sIdx];
 
         // Draw Rank (Top Left) using Font
-        Draw.text(rankStr, x + 6 * scale, y + 14 * scale, 10 * scale, color, 'center');
+        // Move inward to avoid 3px border
+        Draw.text(rankStr, x + 10 * scale, y + 16 * scale, 10 * scale, color, 'center');
 
         // Draw Suit (Middle) using Pixel Sprite
         // Center of card: x + w/2, y + h/2 + offset
@@ -69,7 +70,7 @@ const CardRenderer = {
         const spriteScale = 2 * scale; // Make suit chunky
         const spriteSize = 7 * spriteScale;
         const sx = x + (w - spriteSize) / 2;
-        const sy = y + (h - spriteSize) / 2 + 5 * scale;
+        const sy = y + (h - spriteSize) / 2 + 5 * scale; // Lower slightly
 
         Draw.pixelSprite(sprite, sx, sy, spriteScale, color);
 

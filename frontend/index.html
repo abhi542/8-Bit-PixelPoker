@@ -39,6 +39,14 @@
             <div id="waiting-msg">Waiting for players...</div>
         </div>
 
+        <!-- UI Overlay: Winner Screen -->
+        <div id="winner-screen" class="screen hidden" style="background: rgba(0,0,0,0.85); z-index: 100;">
+            <h1 class="winner-anim" style="color: #f1c40f; text-shadow: 4px 4px #000;">★ WINNER ★</h1>
+            <div id="winner-name" style="font-size: 24px; margin: 20px; color: #fff;">-</div>
+            <div id="winner-hand" style="font-size: 16px; color: #ecf0f1; margin-bottom: 40px;">-</div>
+            <button id="btn-home" class="pixel-btn">RETURN TO LOBBY</button>
+        </div>
+
         <!-- UI Overlay: In-Game HUD -->
         <div id="hud-screen" class="overlay hidden">
             <!-- Sidebar -->

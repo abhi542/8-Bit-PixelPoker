@@ -104,7 +104,8 @@ canvas {
 /* Sidebar */
 #sidebar {
     position: absolute;
-    top: 10px;
+    top: 150px;
+    /* Moved down from 10px to avoid blocking players */
     right: 10px;
     width: 200px;
     background: rgba(0, 0, 0, 0.6);

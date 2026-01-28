@@ -29,6 +29,7 @@ type Table struct {
 	Deck      Deck
 	Seats     [9]*Seat // Fixed 9 seats
 	Community []Card
+	Winners   []int `json:"winners"` // Indices of winners
 	Config    TableConfig
 }
 
@@ -314,6 +315,9 @@ func (t *Table) processShowdown() {
 		fmt.Printf("Pot %d: %d chips (Eligible: %v)\n", i, p.Amount, p.EligibleSeats)
 	}
 
+	// Track all unique winners for the frontend
+	uniqueWinners := make(map[int]bool)
+
 	// For each pot (main + sides)
 	for _, pot := range pots {
 		if pot.Amount == 0 {
@@ -363,6 +367,7 @@ func (t *Table) processShowdown() {
 			fmt.Printf("Winners for Pot %d: %v. Share: %d\n", pot.Amount, winners, share)
 
 			for i, wIdx := range winners {
+				uniqueWinners[wIdx] = true // Track for UI
 				t.Seats[wIdx].Chips += share
 				if i == 0 {
 					t.Seats[wIdx].Chips += remainder // Odd chip to first
@@ -374,6 +379,13 @@ func (t *Table) processShowdown() {
 			}
 		}
 	}
+
+	// Assign to Table struct
+	t.Winners = nil
+	for wIdx := range uniqueWinners {
+		t.Winners = append(t.Winners, wIdx)
+	}
+
 	fmt.Println("=== END SHOWDOWN ===")
 }
 

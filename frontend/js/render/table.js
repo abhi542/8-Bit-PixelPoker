@@ -62,8 +62,9 @@ const TableRenderer = {
         // SHOWDOWN ANNOUNCEMENT
         // StateShowdown = 9
         if (g.State && g.State.State === 9) {
-            Draw.text(`★ SHOWDOWN ★`, cx, cy + 160, 24, '#f1c40f');
-            Draw.text(`CHECK LOGS FOR WINNER`, cx, cy + 185, 12, '#95a5a6');
+            // Move above cards (cy - 90)
+            Draw.text(`★ SHOWDOWN ★`, cx, cy - 90, 24, '#f1c40f');
+            Draw.text(`CHECK LOGS FOR WINNER`, cx, cy - 65, 12, '#95a5a6');
         }
 
         // 4. Seats
@@ -139,7 +140,7 @@ const TableRenderer = {
             curY -= step;
         }
 
-        Draw.text(`${amount}`, x, y + 20, 8, '#fff');
+        Draw.text(`${amount}`, x, y + 25, 8, '#fff');
     },
 
     shadeColor(color, percent) {
@@ -151,8 +152,8 @@ const TableRenderer = {
     drawSeat(idx, cx, cy, tw, th, seat) {
         // Position logic
         const angle = (idx / 9) * Math.PI * 2 + Math.PI / 2;
-        const rx = tw / 2 + 60;
-        const ry = th / 2 + 60;
+        const rx = tw / 2 + 35; // Moved inward (was 60, then 45 check)
+        const ry = th / 2 + 35; // Moved inward to avoid bottom bar overlap
         const x = cx + Math.cos(angle) * rx;
         const y = cy + Math.sin(angle) * ry;
 
@@ -188,7 +189,7 @@ const TableRenderer = {
             // Name
             Draw.text(seat.Username.substring(0, 8), x, y - 50, 10, '#fff');
             // Chips
-            Draw.text(`$${seat.Chips}`, x, y + 55, 10, '#f1c40f');
+            Draw.text(`$${seat.Chips}`, x, y + 50, 10, '#f1c40f');
 
             // CURRENT BET DISPLAY
             // Where to find it? seat.BetState is linked in Go, so json structure is:
