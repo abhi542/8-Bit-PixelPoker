@@ -40,6 +40,14 @@ const App = {
             location.reload();
         };
 
+        document.getElementById('btn-home').onclick = () => {
+            location.reload();
+        };
+
+        document.getElementById('btn-home').onclick = () => {
+            location.reload();
+        };
+
         // Actions
         document.getElementById('act-fold').onclick = () => WS.sendAction('FOLD', 0);
         document.getElementById('act-check').onclick = () => WS.sendAction('CHECK', 0);
@@ -94,6 +102,30 @@ const App = {
                     li.classList.add('active');
                 }
             });
+        }
+    },
+
+    checkWinner() {
+        // Called by WS on state update
+        if (!State.gameState) return;
+        const g = State.gameState;
+
+        // If Showdown and Winners exist
+        // State 9 = Showdown. Note: g.State is an object { State: int, Name: string }
+        if (g.State && g.State.State === 9 && g.winners && g.winners.length > 0) {
+            const winnerIdx = g.winners[0]; // Just take first for now
+            const seat = g.Seats[winnerIdx];
+            if (seat) {
+                document.getElementById('winner-name').innerText = seat.Username;
+                document.getElementById('winner-hand').innerText = seat.hand_desc || "Winning Hand";
+
+                // Show Overlay with delay to let canvas render showdown first
+                setTimeout(() => {
+                    document.getElementById('winner-screen').classList.remove('hidden');
+                }, 1000);
+            }
+        } else {
+            document.getElementById('winner-screen').classList.add('hidden');
         }
     }
 };
