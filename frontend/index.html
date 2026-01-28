@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pixel Poker</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Container -->
+    <div id="game-container">
+        <!-- Render Layer -->
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+        <!-- UI Overlay: Lobby -->
+        <div id="lobby-screen" class="screen">
+            <h1>PIXEL POKER</h1>
+            <div class="menu-box">
+                <button id="btn-create" class="pixel-btn">CREATE LOBBY</button>
+                <div class="divider">OR</div>
+                <input type="text" id="inp-code" placeholder="ENTER CODE" maxlength="4" class="pixel-inp">
+                <input type="text" id="inp-name" placeholder="YOUR NAME" maxlength="12" class="pixel-inp">
+                <button id="btn-join" class="pixel-btn">JOIN</button>
+            </div>
+            <div style="margin-top: 20px; font-size: 10px; cursor: pointer; text-decoration: underline;" id="btn-reset">
+                [SWITCH ACCOUNT / NEW PLAYER]
+            </div>
+            <div id="lobby-status" class="status-msg"></div>
+        </div>
+
+        <!-- UI Overlay: Waiting Room -->
+        <div id="waiting-screen" class="screen hidden">
+            <h2>LOBBY: <span id="lobby-code-disp">????</span></h2>
+            <div id="player-list"></div>
+            <button id="btn-start" class="pixel-btn hidden">START GAME</button>
+            <div id="waiting-msg">Waiting for players...</div>
+        </div>
+
+        <!-- UI Overlay: In-Game HUD -->
+        <div id="hud-screen" class="overlay hidden">
+            <!-- Sidebar -->
+            <div id="sidebar" class="panel">
+                <h3>HAND RANK</h3>
+                <ul id="rank-list">
+                    <li data-rank="Royal Flush">Royal Flush</li>
+                    <li data-rank="Straight Flush">Straight Flush</li>
+                    <li data-rank="Four of a Kind">Four of a Kind</li>
+                    <li data-rank="Full House">Full House</li>
+                    <li data-rank="Flush">Flush</li>
+                    <li data-rank="Straight">Straight</li>
+                    <li data-rank="Three of a Kind">Three of a Kind</li>
+                    <li data-rank="Two Pair">Two Pair</li>
+                    <li data-rank="One Pair">One Pair</li>
+                    <li data-rank="High Card">High Card</li>
+                </ul>
+                <div id="current-hand-box">
+                    <small>CURRENT:</small><br>
+                    <span id="my-hand-rank" class="highlight">High Card</span>
+                </div>
+            </div>
+
+            <!-- Action Bar -->
+            <div id="action-bar" class="panel bottom-bar">
+                <div id="action-controls">
+                    <button id="act-fold" class="pixel-btn red">FOLD</button>
+                    <button id="act-check" class="pixel-btn blue">CHECK</button>
+                    <button id="act-call" class="pixel-btn blue">CALL</button>
+                    <button id="act-bet" class="pixel-btn green">BET/RAISE</button>
+                    <input type="range" id="bet-slider" min="0" max="1000" value="0">
+                    <span id="bet-val">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/ws.js"></script>
+    <script src="js/render/cards.js"></script>
+    <script src="js/render/table.js"></script>
+    <script src="js/render/renderer.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>
